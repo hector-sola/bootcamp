@@ -8,7 +8,7 @@ En el diagrama de arquitectura, los usuarios inician una solicitud HTTP accedien
 
 Al completar el formulario, los usuarios envían los datos al servidor. Luego, Apache reenvía los datos enviados a un script PHP responsable de almacenar esta información en la base de datos MySQL. Si los datos se almacenan correctamente, MySQL comunica este éxito al script PHP, que responde con un mensaje HTML que se muestra en el navegador del usuario. Por otro lado, si hay un problema al guardar los datos, el script PHP devuelve un mensaje de error al navegador del usuario, notificándole el problema encontrado
 
-![Arquitectura]((https://reto.295devops.com/img/12.png))
+![Alt text](https://reto.295devops.com/img/12.png)
 
 ## **Implementación**
 La implementación del script de instalación deberá considerar las siguientes etapas:
