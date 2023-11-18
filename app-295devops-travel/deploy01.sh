@@ -170,7 +170,7 @@ then
         git pull
         cd ..
 else
-	log_info"Cloning Repository"
+	log_info "Cloning Repository"
         git clone -b clase2-linux-bash $REPOURL$REPO
 fi
 
