@@ -191,7 +191,7 @@ fi
 if grep -q "^index.php" "$php_ini_path"; then
     log_warning "The PHP configuration already includes index.php."
 else
-    log_info #Adding index.php to the list of default index files in $php_ini_path."
+    log_info "Adding index.php to the list of default index files in $php_ini_path."
     echo "DirectoryIndex index.php" | tee -a "$php_ini_path" > /dev/null
 fi
 
