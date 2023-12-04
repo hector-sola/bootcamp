@@ -1,0 +1,112 @@
+version: '3.8'
+services:
+  vote:
+    image: roxsross12/voting-app:vote-1.0.0
+    container_name: vote-app
+    environment:
+       - VIRTUAL_HOST=vote.localhost.sslip.io
+       - VIRTUAL_PORT=80
+      #  - LETSENCRYPT_HOST=vote.localhost.sslip.io
+      #  - LETSENCRYPT_EMAIL=hector.sola.garrido@gmail.com
+    ports:
+      - 5000:80
+    depends_on:
+      - redis
+    networks:
+      - frontend
+      - backend
+  result:
+    image: roxsross12/voting-app:result-1.0.0
+    container_name: result-app 
+    environment:
+       - VIRTUAL_HOST=result.localhost.sslip.io
+       - VIRTUAL_PORT=80  
+      #  - LETSENCRYPT_HOST=result.localhost.sslip.io
+      #  - LETSENCRYPT_EMAIL=hector.sola.garrido@gmail.com       
+    ports:
+      - 5001:80 
+    depends_on:
+      - db
+    networks:
+      - frontend
+      - backend
+  worker:
+    image: roxsross12/voting-app:worker-1.0.0
+    container_name: worker-app
+    depends_on:
+      - redis
+      - db
+    networks:
+      - backend
+  db:
+    image: postgres:15-alpine
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+    networks:
+      - backend
+  redis:
+    image: redis:alpine
+    container_name: redis
+    volumes:
+      - redis-data:/data/
+    networks:
+      - backend
+  pgadmin:
+    image: dpage/pgadmin4:6.17
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com 
+      - PGADMIN_DEFAULT_PASSWORD=secret123
+      - PGADMIN_LISTEN_PORT=80
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - 5003:80
+    networks:
+      - backend
+    depends_on:
+      - db
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      # - certs:/etc/nginx/certs
+      # - vhost:/etc/nginx/vhost.d
+      # - html:/usr/share/nginx/html
+        # - /var/run/docker.sock:/var/run/docker.sock:ro 
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      # - confd:/etc/nginx/conf.d
+    networks:
+      - frontend
+  # letsencrypt:
+  #   image: jrcs/letsencrypt-nginx-proxy-companion
+  #   container_name: letsencrypt
+  #   depends_on:
+  #     - nginx-proxy
+  #   volumes:
+  #     - certs:/etc/nginx/certs
+  #     - vhost:/etc/nginx/vhost.d
+  #     - html:/usr/share/nginx/html
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+      # - /var/run/docker.sock:/var/run/docker.sock:ro  
+  #   networks:
+  #     - frontend
+
+volumes:
+  redis-data:
+  db-data:
+  pgadmin-data:
+  # certs:
+  # vhost:
+  # html:
+  # confd:
+networks:
+  frontend:
+  backend:
