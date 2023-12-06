@@ -211,13 +211,6 @@ checkMariaDB
 log_info "Configurando base de datos ..."
 echo -n "Set DB password:"
 read DBPASS
-mysql -e "
-DROP DATABASE IF EXISTS devopstravel;
-DROP USER IF EXISTS 'codeuser'@'localhost';
-CREATE DATABASE devopstravel;
-CREATE USER 'codeuser'@'localhost' IDENTIFIED BY '$DBPASS';
-GRANT ALL PRIVILEGES ON *.* TO 'codeuser'@'localhost';
-FLUSH PRIVILEGES;"
 
 log_info "STAGE 1: [Init] ........complete"
 ### STAGE 2: [Build]
